@@ -1,0 +1,61 @@
+# ansible_setup
+on controller 
+ 1-Setup EC2 instance  
+ 2-Setup hostname 
+    Sudo su 
+    hostnamectl set-hostname controlnode 
+ 3-Create ansadmin user 
+    useradd  -m ansadmin -s /bin/bash 
+    passwd ansadmin  
+    exit 
+    sudo su 
+ 4-Add user to sudoers file 
+    Visudo 
+    ansadmin  ALL=(ALL) NOPASSWD:ALL 
+ 5-Generate ssh keys 
+    su ansadmin  
+    ssh-keygen  
+    cd  ~/.ssh
+  6-Enable password based login 
+    sudo su 
+    vi /etc/ssh/ssh_config 
+    PasswordAuthentication yes  
+    service sshd restart
+   7-install ansible
+---------------------------------------
+on managed node
+ 1-Setup EC2 instance  
+ 2-Setup hostname 
+   Sudo su 
+   hostnamectl set-hostname managednode (shakliat (; )
+ 3-Create ansadmin user 
+   useradd  -m ansadmin -s /bin/bash 
+   passwd ansadmin  
+   exit 
+   sudo su 
+ 4-Add user to sudoers file 
+   Visudo 
+   ansadmin  ALL=(ALL) NOPASSWD:ALL 
+ 5-Enable password based login 
+   sudo su 
+   vi /etc/ssh/ssh_config 
+   PasswordAuthentication yes  
+   service sshd restart 
+----------------------------------------
+the main important issue will face you (public key) you can not ssh to the managed node through controller node to solve it you have to copy public key which you generate in controller into managed authrized key file in .ssh dir
+
+on managed node 
+  1-rm -r .ssh/
+  2-mkdir .ssh
+  3-cd .ssh/
+  4-touch authorized_keys
+  5-chmod 700 authorized_keys
+  6-copy public key(controller node) to authorized_keys (managed node) 
+  
+on controller node to test connection
+   ssh user@privatekey(managed node)
+   or 
+   ping 
+   
+
+
